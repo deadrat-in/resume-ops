@@ -1,0 +1,7 @@
+Tailor the work experience summary and highlights for the target job description while strictly preserving dates, company names, and job titles.
+
+Job Description:
+{{job_description}}
+
+Master Resume:
+{{master_resume}}

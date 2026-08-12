@@ -1,0 +1,7 @@
+Analyze the master resume and job description. Identify key matching skills, strategic positioning, and emphasis points for tailoring without fabricating facts.
+
+Job Description:
+{{job_description}}
+
+Master Resume:
+{{master_resume}}

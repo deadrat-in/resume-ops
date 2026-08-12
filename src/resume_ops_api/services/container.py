@@ -17,6 +17,7 @@ from resume_ops_api.services.renderer import ResumeRenderer
 from resume_ops_api.services.schema import ResumeSchemaValidator
 from resume_ops_api.services.store import JobStore
 from resume_ops_api.services.themes import ThemeService
+from resume_ops_api.services.tracing import setup_tracing
 
 
 @dataclass
@@ -63,6 +64,7 @@ class ServiceContainer:
 
 
 def build_container(settings: Settings, **overrides: Any) -> ServiceContainer:
+    setup_tracing(settings)
     database = overrides.get("database") or Database(settings.resolved_database_url)
     validator = overrides.get("validator") or ResumeSchemaValidator(settings.schema_path)
     theme_service = overrides.get("theme_service") or ThemeService(settings.allowed_themes, settings.default_theme)

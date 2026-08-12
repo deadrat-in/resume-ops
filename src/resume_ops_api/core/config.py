@@ -83,6 +83,13 @@ class Settings(BaseSettings):
     llm_retry_max_wait_seconds: float = 60.0
     llm_retry_multiplier: float = 3.0
 
+    # Tracing & Evaluation Configuration
+    enable_tracing: bool = False
+    opik_api_key: str | None = None
+    opik_project_name: str = "resume-ops"
+    opik_workspace: str | None = None
+    eval_model: str | None = None
+
     @field_validator("allowed_themes", mode="before")
     @classmethod
     def parse_allowed_themes(cls, value: object) -> list[str]:

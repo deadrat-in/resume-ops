@@ -9,3 +9,4 @@ data/
 .env
 master-resume.json
 career-ops/ 
+.env*

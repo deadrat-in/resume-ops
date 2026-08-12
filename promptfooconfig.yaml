@@ -1,0 +1,39 @@
+# Promptfoo Configuration for Resume-Ops Prompt Regression Benchmarking
+# Run with: npx promptfoo@latest eval
+
+description: "Resume-Ops Prompt Benchmark & Quality Matrix"
+
+prompts:
+  - file://tests/fixtures/prompts/strategy_prompt.txt
+  - file://tests/fixtures/prompts/work_prompt.txt
+
+providers:
+  - id: "openai:gpt-4o-mini"
+    config:
+      temperature: 0.2
+
+defaultTest:
+  options:
+    transform: "output"
+  assert:
+    # Ensure response contains valid JSON
+    - type: is-json
+    # Immutability assertion: output must not mention unverified degrees
+    - type: not-contains
+      value: "Ph.D."
+    # Faithfulness rubric
+    - type: llm-rubric
+      value: "Does the output preserve exact job dates and company names from the provided master resume without inventing fake projects?"
+
+tests:
+  - description: "Backend Engineer tailoring for Senior DevOps Job Description"
+    vars:
+      job_description: |
+        We are looking for a Senior DevOps Engineer to manage Podman containers, Kafka streams, and FastAPI microservices.
+      master_resume: |
+        Jane Doe - Senior Backend Engineer. Experience: Tech Corp (2021-Present) - FastAPI, Kafka, PostgreSQL.
+    assert:
+      - type: contains
+        value: "FastAPI"
+      - type: contains
+        value: "Kafka"
