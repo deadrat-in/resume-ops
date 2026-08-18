@@ -729,3 +729,54 @@ class TestContainerInitialization:
 
         assert container.llm_client.enable_cache is True
 
+
+class TestAtsText:
+    """Tests for ATS-friendly plain-text formatting (Label: value layout)."""
+
+    def test_json_to_ats_text_format(self) -> None:
+        from resume_ops_api.services.ats_text import json_to_ats_text
+
+        resume_data = {
+            "basics": {
+                "name": "Jane Doe",
+                "label": "Software Architect",
+                "email": "jane@example.com",
+                "phone": "+1-555-0199",
+                "summary": "Experienced distributed systems architect.",
+                "location": {"city": "San Francisco", "region": "CA", "countryCode": "US"},
+            },
+            "work": [
+                {
+                    "name": "Acme Corp",
+                    "position": "Principal Engineer",
+                    "startDate": "2020-01",
+                    "endDate": "2023-05",
+                    "summary": "Led architecture.",
+                    "highlights": ["Scaled systems to 10M DAU", "Reduced latency by 40%"],
+                }
+            ],
+            "skills": [
+                {
+                    "name": "Cloud & Backend",
+                    "keywords": ["Python", "Go", "Kubernetes", "PostgreSQL"],
+                }
+            ],
+        }
+
+        ats_text = json_to_ats_text(resume_data)
+
+        # Assert ATS format invariants: Label: value lines
+        assert "Name: Jane Doe" in ats_text
+        assert "Title: Software Architect" in ats_text
+        assert "Email: jane@example.com" in ats_text
+        assert "Phone: +1-555-0199" in ats_text
+        assert "Location: San Francisco, CA, US" in ats_text
+        assert "Company: Acme Corp" in ats_text
+        assert "Job Title: Principal Engineer" in ats_text
+        assert "From: January 2020" in ats_text
+        assert "To: May 2023" in ats_text
+        assert "Skill Category: Cloud & Backend" in ats_text
+        assert "Keywords: Python, Go, Kubernetes, PostgreSQL" in ats_text
+        assert "Scaled systems to 10M DAU" in ats_text
+
+

@@ -66,7 +66,11 @@ class Settings(BaseSettings):
         return self
     default_theme: str = "jsonresume-theme-folio"
     allowed_themes: list[str] = Field(
-        default_factory=lambda: ["jsonresume-theme-folio", "jsonresume-theme-stackoverflow"]
+        default_factory=lambda: [
+            "jsonresume-theme-folio",
+            "jsonresume-theme-folio-concise",
+            "jsonresume-theme-stackoverflow",
+        ]
     )
     max_concurrent_jobs: int = 2
     callback_timeout_seconds: int = 5
@@ -94,7 +98,7 @@ class Settings(BaseSettings):
     @classmethod
     def parse_allowed_themes(cls, value: object) -> list[str]:
         if value is None:
-            return ["jsonresume-theme-folio", "jsonresume-theme-stackoverflow"]
+            return ["jsonresume-theme-folio", "jsonresume-theme-folio-concise", "jsonresume-theme-stackoverflow"]
         if isinstance(value, str):
             return [item.strip() for item in value.split(",") if item.strip()]
         if isinstance(value, list):
