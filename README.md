@@ -2,7 +2,7 @@
 
 Podman-first FastAPI service for tailoring a JSON Resume to a job description while protecting immutable resume fields.
 
-[![Documentation](https://img.shields.io/badge/Docs-.env%20Configurator%20%26%20Guide-38bdf8?style=for-the-badge&logo=github)](https://rat-s.github.io/resume-ops/)
+[![Documentation](https://img.shields.io/badge/Docs-.env%20Configurator%20%26%20Guide-38bdf8?style=for-the-badge&logo=github)](https://deadrat-in.github.io/resume-ops/)
 
 ## Why resume-ops? (The Ethos)
 
@@ -101,7 +101,7 @@ This flag instructs the container runtime to automatically update host directory
     ```bash
     podman compose up -d
     ```
-    This will pull `ghcr.io/rat-s/resume-ops:latest` and `ghcr.io/rat-s/job-ops:latest` from the registry and launch them immediately.
+    This will pull `ghcr.io/deadrat-in/resume-ops:latest` and `ghcr.io/deadrat-in/job-ops:latest` from the registry and launch them immediately.
 
 Once running:
 
@@ -113,7 +113,7 @@ Once running:
 If you are developing or want to build/recompile the images locally:
 
 ```bash
-git clone --recurse-submodules https://github.com/Rat-S/resume-ops.git
+git clone --recurse-submodules https://github.com/deadrat-in/resume-ops.git
 cd resume-ops
 # Follow the configuration steps (environment and master resume setup) as in Option 1.
 podman compose up -d --build
@@ -133,7 +133,7 @@ If you are running the pre-built registry images via `compose.yaml`:
 podman compose pull && podman compose up -d
 ```
 
-This pulls the latest `ghcr.io/rat-s/resume-ops:latest` and `ghcr.io/rat-s/job-ops:latest` images from GHCR and restarts the containers in place. Your data (SQLite databases, uploaded resumes, scraped jobs) is stored in the `./data/` host volume and is **never affected** by image updates.
+This pulls the latest `ghcr.io/deadrat-in/resume-ops:latest` and `ghcr.io/deadrat-in/job-ops:latest` images from GHCR and restarts the containers in place. Your data (SQLite databases, uploaded resumes, scraped jobs) is stored in the `./data/` host volume and is **never affected** by image updates.
 
 ### Podman Quadlets (systemd)
 
@@ -141,8 +141,8 @@ If you are running the containers as systemd services via [Podman Quadlets](http
 
 ```bash
 # Pull the latest images
-podman pull ghcr.io/rat-s/resume-ops:latest
-podman pull ghcr.io/rat-s/job-ops:latest
+podman pull ghcr.io/deadrat-in/resume-ops:latest
+podman pull ghcr.io/deadrat-in/job-ops:latest
 
 # Restart the systemd units (adjust service names to match your .container files)
 systemctl --user restart resume-ops.service job-ops.service
@@ -153,7 +153,7 @@ systemctl --user restart resume-ops.service job-ops.service
 ```ini
 # In your .container file:
 [Container]
-Image=ghcr.io/rat-s/resume-ops:latest
+Image=ghcr.io/deadrat-in/resume-ops:latest
 AutoUpdate=registry
 ```
 

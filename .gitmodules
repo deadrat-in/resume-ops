@@ -1,4 +1,4 @@
 [submodule "job-ops"]
 	path = job-ops
-	url = https://github.com/Rat-S/job-ops.git
+	url = https://github.com/deadrat-in/job-ops.git
 	branch = main

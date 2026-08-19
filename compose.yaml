@@ -1,6 +1,6 @@
 services:
   resume-ops:
-    image: ghcr.io/rat-s/resume-ops:latest
+    image: ghcr.io/deadrat-in/resume-ops:latest
     env_file:
       - .env
     environment:
@@ -18,7 +18,7 @@ services:
       start_period: 15s
 
   job-ops:
-    image: ghcr.io/rat-s/job-ops:latest
+    image: ghcr.io/deadrat-in/job-ops:latest
     container_name: job-ops
     ports:
       - "3005:3001"

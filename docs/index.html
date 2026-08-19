@@ -1,125 +1,170 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>resume-ops | Documentation & .env Configurator</title>
-  <meta name="description" content="Clean developer documentation and interactive .env configurator for resume-ops: a Podman-first FastAPI service for structured JSON resume tailoring.">
-  <link rel="icon" href="favicon.ico" />
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
-  <link rel="manifest" href="site.webmanifest" />
-  <link rel="stylesheet" href="style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-</head>
-<body>
-
-  <!-- Navigation Header -->
-  <header>
-    <div class="container nav-container">
-      <div class="nav-left">
-        <a href="#" class="brand">
-          <span>📄 resume-ops</span>
-        </a>
-      </div>
-      <div class="nav-right">
-        <a href="https://go.covai.org" class="btn-covai">
-          ← covai.org
-        </a>
-        <a href="https://github.com/Rat-S/resume-ops" target="_blank" rel="noopener noreferrer" class="btn-github">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-          GitHub Repository
-        </a>
-      </div>
-    </div>
-  </header>
-
-  <main class="container">
-
-    <!-- Hero Header Section -->
-    <section class="hero">
-      <div class="hero-pill">Podman-First FastAPI Service</div>
-      <h1>Resume Ops Documentation</h1>
-      <p class="hero-subtitle">
-        Headless API service for tailoring JSON Resumes using a structured LangGraph state machine while strictly protecting immutable resume fields.
-      </p>
-    </section>
-
-    <!-- The Ethos Section -->
-    <section id="ethos">
-      <div class="section-header">
-        <h2 class="section-title">Why resume-ops? (The Ethos)</h2>
-        <p class="section-desc">An AI tool built on your side of the table.</p>
-      </div>
-      <div class="grid-3">
-        <div class="card">
-          <h3 class="card-section-title text-cyan">🎯 Signal Over Noise</h3>
-          <p class="endpoint-desc">Re-aligns your authentic experience to match the target job description so your true fit is immediately clear to recruiters—without keyword stuffing or spam.</p>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>resume-ops | Documentation & .env Configurator</title>
+    <meta
+      name="description"
+      content="Clean developer documentation and interactive .env configurator for resume-ops: a Podman-first FastAPI service for structured JSON resume tailoring."
+    />
+    <link rel="icon" href="favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
+    <link rel="manifest" href="site.webmanifest" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Navigation Header -->
+    <header>
+      <div class="container nav-container">
+        <div class="nav-left">
+          <a href="#" class="brand">
+            <span>📄 resume-ops</span>
+          </a>
         </div>
-
-        <div class="card">
-          <h3 class="card-section-title text-purple">🛡️ Truth Over Fabrication</h3>
-          <p class="endpoint-desc">Your contact details, job titles, companies, dates, and degrees are strictly immutable. <code>resume-ops</code> reformulates real achievements; it <strong>never</strong> invents fake projects or unverified skills.</p>
-        </div>
-
-        <div class="card">
-          <h3 class="card-section-title text-green">🔒 Privacy & Self-Hosting</h3>
-          <p class="endpoint-desc">Runs in your own isolated Podman/Docker container. Retain full control over model routing—whether running 100% offline with local LLMs (vLLM, Ollama) or routing to your trusted API provider of choice.</p>
+        <div class="nav-right">
+          <a href="https://go.covai.org" class="btn-covai"> ← covai.org </a>
+          <a
+            href="https://github.com/deadrat-in/resume-ops"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-github"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"
+              />
+            </svg>
+            GitHub Repository
+          </a>
         </div>
       </div>
-    </section>
+    </header>
 
-    <!-- Quickstart & Container Snippets -->
-    <section id="quickstart">
-      <div class="section-header">
-        <h2 class="section-title">Deployment Snippets</h2>
-        <p class="section-desc">Copy-pasteable setup commands for Podman, Docker Compose, systemd Quadlets, and API requests.</p>
-      </div>
+    <main class="container">
+      <!-- Hero Header Section -->
+      <section class="hero">
+        <div class="hero-pill">Podman-First FastAPI Service</div>
+        <h1>Resume Ops Documentation</h1>
+        <p class="hero-subtitle">
+          Headless API service for tailoring JSON Resumes using a structured
+          LangGraph state machine while strictly protecting immutable resume fields.
+        </p>
+      </section>
 
-      <div class="snippet-box">
-        <div class="snippet-header">
-          <div class="snippet-tabs">
-            <button class="tab-btn active" data-tab="tab-podman-run">Podman Run</button>
-            <button class="tab-btn" data-tab="tab-compose">Podman Compose</button>
-            <button class="tab-btn" data-tab="tab-quadlet">Podman Quadlet (systemd)</button>
-            <button class="tab-btn" data-tab="tab-curl-sync">cURL (Sync)</button>
-            <button class="tab-btn" data-tab="tab-curl-async">cURL (Async)</button>
+      <!-- The Ethos Section -->
+      <section id="ethos">
+        <div class="section-header">
+          <h2 class="section-title">Why resume-ops? (The Ethos)</h2>
+          <p class="section-desc">An AI tool built on your side of the table.</p>
+        </div>
+        <div class="grid-3">
+          <div class="card">
+            <h3 class="card-section-title text-cyan">🎯 Signal Over Noise</h3>
+            <p class="endpoint-desc">
+              Re-aligns your authentic experience to match the target job description
+              so your true fit is immediately clear to recruiters—without keyword
+              stuffing or spam.
+            </p>
           </div>
-          <button class="copy-btn" onclick="copyText('current-snippet-content', 'command')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-            Copy Snippet
-          </button>
+
+          <div class="card">
+            <h3 class="card-section-title text-purple">🛡️ Truth Over Fabrication</h3>
+            <p class="endpoint-desc">
+              Your contact details, job titles, companies, dates, and degrees are
+              strictly immutable. <code>resume-ops</code> reformulates real
+              achievements; it <strong>never</strong> invents fake projects or
+              unverified skills.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3 class="card-section-title text-green">🔒 Privacy & Self-Hosting</h3>
+            <p class="endpoint-desc">
+              Runs in your own isolated Podman/Docker container. Retain full control
+              over model routing—whether running 100% offline with local LLMs (vLLM,
+              Ollama) or routing to your trusted API provider of choice.
+            </p>
+          </div>
         </div>
-        <div class="snippet-body">
-          <div id="tab-podman-run" class="snippet-pane">
-            <pre><code id="current-snippet-content">podman run -d \
+      </section>
+
+      <!-- Quickstart & Container Snippets -->
+      <section id="quickstart">
+        <div class="section-header">
+          <h2 class="section-title">Deployment Snippets</h2>
+          <p class="section-desc">
+            Copy-pasteable setup commands for Podman, Docker Compose, systemd
+            Quadlets, and API requests.
+          </p>
+        </div>
+
+        <div class="snippet-box">
+          <div class="snippet-header">
+            <div class="snippet-tabs">
+              <button class="tab-btn active" data-tab="tab-podman-run">
+                Podman Run
+              </button>
+              <button class="tab-btn" data-tab="tab-compose">Podman Compose</button>
+              <button class="tab-btn" data-tab="tab-quadlet">
+                Podman Quadlet (systemd)
+              </button>
+              <button class="tab-btn" data-tab="tab-curl-sync">cURL (Sync)</button>
+              <button class="tab-btn" data-tab="tab-curl-async">cURL (Async)</button>
+            </div>
+            <button
+              class="copy-btn"
+              onclick="copyText('current-snippet-content', 'command')"
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+              </svg>
+              Copy Snippet
+            </button>
+          </div>
+          <div class="snippet-body">
+            <div id="tab-podman-run" class="snippet-pane">
+              <pre><code id="current-snippet-content">podman run -d \
   --name resume-ops \
   -p 8000:8000 \
   -v ./data:/data:Z,U \
   --env-file .env \
-  ghcr.io/rat-s/resume-ops:latest</code></pre>
-          </div>
+  ghcr.io/deadrat-in/resume-ops:latest</code></pre>
+            </div>
 
-          <div id="tab-compose" class="snippet-pane" style="display: none;">
-            <pre><code># Run pre-built GHCR registry image via compose
+            <div id="tab-compose" class="snippet-pane" style="display: none">
+              <pre><code># Run pre-built GHCR registry image via compose
 podman compose up -d
 
 # Service endpoints:
 # - API: http://localhost:8000
 # - Health check: http://localhost:8000/healthz</code></pre>
-          </div>
+            </div>
 
-          <div id="tab-quadlet" class="snippet-pane" style="display: none;">
-            <pre><code># ~/.config/containers/systemd/resume-ops.container
+            <div id="tab-quadlet" class="snippet-pane" style="display: none">
+              <pre><code># ~/.config/containers/systemd/resume-ops.container
 [Unit]
 Description=Resume Ops FastAPI Container
 After=network-online.target
 
 [Container]
-Image=ghcr.io/rat-s/resume-ops:latest
+Image=ghcr.io/deadrat-in/resume-ops:latest
 PublishPort=8000:8000
 Volume=%h/resume-ops/data:/data:Z,U
 EnvironmentFile=%h/resume-ops/.env
@@ -127,220 +172,349 @@ AutoUpdate=registry
 
 [Install]
 WantedBy=default.target</code></pre>
-          </div>
+            </div>
 
-          <div id="tab-curl-sync" class="snippet-pane" style="display: none;">
-            <pre><code>curl -X POST http://localhost:8000/api/v1/tailor \
+            <div id="tab-curl-sync" class="snippet-pane" style="display: none">
+              <pre><code>curl -X POST http://localhost:8000/api/v1/tailor \
   -H "Content-Type: application/json" \
   -d '{
     "job_description": "Senior DevOps Engineer with Kubernetes & Terraform experience",
     "theme": "jsonresume-theme-folio"
   }'</code></pre>
-          </div>
+            </div>
 
-          <div id="tab-curl-async" class="snippet-pane" style="display: none;">
-            <pre><code>curl -X POST http://localhost:8000/api/v1/tailor \
+            <div id="tab-curl-async" class="snippet-pane" style="display: none">
+              <pre><code>curl -X POST http://localhost:8000/api/v1/tailor \
   -H "Content-Type: application/json" \
   -d '{
     "job_description": "Full Stack Lead Engineer",
     "callback_url": "http://job-ops:3005/api/webhooks/resume-ready"
   }'</code></pre>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Interactive .env Generator -->
-    <section id="configurator">
-      <div class="section-header">
-        <h2 class="section-title">Interactive .env Configurator</h2>
-        <p class="section-desc">Generate a complete <code>.env</code> configuration file matching <code>.env.example</code> with live model fetching from OpenRouter or custom OpenAI base URLs.</p>
-      </div>
+      <!-- Interactive .env Generator -->
+      <section id="configurator">
+        <div class="section-header">
+          <h2 class="section-title">Interactive .env Configurator</h2>
+          <p class="section-desc">
+            Generate a complete <code>.env</code> configuration file matching
+            <code>.env.example</code> with live model fetching from OpenRouter or
+            custom OpenAI base URLs.
+          </p>
+        </div>
 
-      <div class="grid-2">
-        <!-- Form Controls -->
-        <div class="card">
-          <h3 class="card-section-title text-cyan">1. API Keys & Base URL</h3>
-          
-          <div class="form-group">
-            <label class="form-label" for="env-base-url">OPENAI_BASE_URL</label>
-            <div class="input-with-button">
-              <input type="text" id="env-base-url" class="form-control env-input" placeholder="https://openrouter.ai/api/v1" value="https://openrouter.ai/api/v1">
-              <button id="btn-fetch-models" class="btn-fetch">⚡ Fetch Models</button>
-            </div>
-            <div class="form-subtext">Queries <code>/v1/models</code> to auto-populate available LLM models into dropdowns.</div>
-          </div>
+        <div class="grid-2">
+          <!-- Form Controls -->
+          <div class="card">
+            <h3 class="card-section-title text-cyan">1. API Keys & Base URL</h3>
 
-          <div class="form-group">
-            <label class="form-label" for="env-openai-key">OPENAI_API_KEY / OpenRouter Key</label>
-            <input type="password" id="env-openai-key" class="form-control env-input" placeholder="sk-or-v1-...">
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="env-anthropic-key">ANTHROPIC_API_KEY</label>
-            <input type="password" id="env-anthropic-key" class="form-control env-input" placeholder="sk-ant-...">
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="env-gemini-key">GEMINI_API_KEY</label>
-            <input type="password" id="env-gemini-key" class="form-control env-input" placeholder="AIzaSy...">
-          </div>
-
-          <h3 class="card-section-title text-purple">2. Model Routing</h3>
-
-          <div class="form-group">
-            <label class="form-label" for="env-default-model">DEFAULT_MODEL</label>
-            <select id="env-default-model" class="form-control env-input"></select>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="env-strategy-model">STRATEGY_MODEL (Optional Override)</label>
-            <select id="env-strategy-model" class="form-control env-input"></select>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="env-work-model">WORK_MODEL (Optional Override)</label>
-            <select id="env-work-model" class="form-control env-input"></select>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="env-skills-model">SKILLS_MODEL (Optional Override)</label>
-            <select id="env-skills-model" class="form-control env-input"></select>
-          </div>
-
-          <h3 class="card-section-title text-green">3. Theme, Tone & Rate Limits</h3>
-
-          <div class="form-group">
-            <label class="form-label" for="env-theme">DEFAULT_THEME</label>
-            <select id="env-theme" class="form-control env-input">
-              <option value="jsonresume-theme-folio">jsonresume-theme-folio (Default)</option>
-              <option value="jsonresume-theme-stackoverflow">jsonresume-theme-stackoverflow</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="env-style">TAILORING_STYLE</label>
-            <input type="text" id="env-style" class="form-control env-input" placeholder="e.g. concise, witty and cheerful, british english" value="concise">
-          </div>
-
-          <div class="grid-2">
             <div class="form-group">
-              <label class="form-label" for="env-concurrency">LLM_MAX_CONCURRENCY</label>
-              <input type="number" id="env-concurrency" class="form-control env-input" value="2">
+              <label class="form-label" for="env-base-url">OPENAI_BASE_URL</label>
+              <div class="input-with-button">
+                <input
+                  type="text"
+                  id="env-base-url"
+                  class="form-control env-input"
+                  placeholder="https://openrouter.ai/api/v1"
+                  value="https://openrouter.ai/api/v1"
+                />
+                <button id="btn-fetch-models" class="btn-fetch">
+                  ⚡ Fetch Models
+                </button>
+              </div>
+              <div class="form-subtext">
+                Queries <code>/v1/models</code> to auto-populate available LLM models
+                into dropdowns.
+              </div>
             </div>
+
             <div class="form-group">
-              <label class="form-label" for="env-max-retries">LLM_MAX_RETRIES</label>
-              <input type="number" id="env-max-retries" class="form-control env-input" value="10">
+              <label class="form-label" for="env-openai-key"
+                >OPENAI_API_KEY / OpenRouter Key</label
+              >
+              <input
+                type="password"
+                id="env-openai-key"
+                class="form-control env-input"
+                placeholder="sk-or-v1-..."
+              />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="env-anthropic-key"
+                >ANTHROPIC_API_KEY</label
+              >
+              <input
+                type="password"
+                id="env-anthropic-key"
+                class="form-control env-input"
+                placeholder="sk-ant-..."
+              />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="env-gemini-key">GEMINI_API_KEY</label>
+              <input
+                type="password"
+                id="env-gemini-key"
+                class="form-control env-input"
+                placeholder="AIzaSy..."
+              />
+            </div>
+
+            <h3 class="card-section-title text-purple">2. Model Routing</h3>
+
+            <div class="form-group">
+              <label class="form-label" for="env-default-model">DEFAULT_MODEL</label>
+              <select id="env-default-model" class="form-control env-input"></select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="env-strategy-model"
+                >STRATEGY_MODEL (Optional Override)</label
+              >
+              <select
+                id="env-strategy-model"
+                class="form-control env-input"
+              ></select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="env-work-model"
+                >WORK_MODEL (Optional Override)</label
+              >
+              <select id="env-work-model" class="form-control env-input"></select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="env-skills-model"
+                >SKILLS_MODEL (Optional Override)</label
+              >
+              <select id="env-skills-model" class="form-control env-input"></select>
+            </div>
+
+            <h3 class="card-section-title text-green">
+              3. Theme, Tone & Rate Limits
+            </h3>
+
+            <div class="form-group">
+              <label class="form-label" for="env-theme">DEFAULT_THEME</label>
+              <select id="env-theme" class="form-control env-input">
+                <option value="jsonresume-theme-folio">
+                  jsonresume-theme-folio (Default)
+                </option>
+                <option value="jsonresume-theme-stackoverflow">
+                  jsonresume-theme-stackoverflow
+                </option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="env-style">TAILORING_STYLE</label>
+              <input
+                type="text"
+                id="env-style"
+                class="form-control env-input"
+                placeholder="e.g. concise, witty and cheerful, british english"
+                value="concise"
+              />
+            </div>
+
+            <div class="grid-2">
+              <div class="form-group">
+                <label class="form-label" for="env-concurrency"
+                  >LLM_MAX_CONCURRENCY</label
+                >
+                <input
+                  type="number"
+                  id="env-concurrency"
+                  class="form-control env-input"
+                  value="2"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="env-max-retries"
+                  >LLM_MAX_RETRIES</label
+                >
+                <input
+                  type="number"
+                  id="env-max-retries"
+                  class="form-control env-input"
+                  value="10"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Generated Output Box -->
+          <div class="card" style="display: flex; flex-direction: column">
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 1rem;
+              "
+            >
+              <h3
+                style="
+                  font-size: 1.05rem;
+                  font-weight: 700;
+                  color: var(--text-primary);
+                "
+              >
+                Generated .env File
+              </h3>
+              <button
+                class="copy-btn"
+                onclick="copyText('env-code-output', '.env file')"
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                  <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+                </svg>
+                Copy .env
+              </button>
+            </div>
+            <div class="snippet-box" style="flex: 1">
+              <div class="snippet-body" style="height: 100%; min-height: 480px">
+                <pre id="env-code-output"></pre>
+              </div>
             </div>
           </div>
         </div>
+      </section>
 
-        <!-- Generated Output Box -->
-        <div class="card" style="display: flex; flex-direction: column;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-            <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary);">Generated .env File</h3>
-            <button class="copy-btn" onclick="copyText('env-code-output', '.env file')">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-              Copy .env
-            </button>
+      <!-- Tailoring Rules -->
+      <section id="rules">
+        <div class="section-header">
+          <h2 class="section-title">Tailoring & Field Protection Rules</h2>
+          <p class="section-desc">
+            Conservative boundaries prevent LLM hallucinations while aligning resume
+            content to job requirements.
+          </p>
+        </div>
+
+        <div class="card">
+          <div style="overflow-x: auto">
+            <table class="rules-table">
+              <thead>
+                <tr>
+                  <th>JSON Resume Section</th>
+                  <th>Status</th>
+                  <th>Tailoring Behavior</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>basics</code></td>
+                  <td><span class="badge badge-protected">🔒 Protected</span></td>
+                  <td>
+                    Name, email, phone, and links are 100% preserved. Only
+                    <code>summary</code> is tailored.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>work</code></td>
+                  <td><span class="badge badge-tailored">⚡ Tailored</span></td>
+                  <td>
+                    Preserves all job titles, dates, and companies. Tailors
+                    <code>summary</code> and <code>highlights</code>.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>education</code></td>
+                  <td><span class="badge badge-tailored">⚡ Tailored</span></td>
+                  <td>
+                    Degrees, dates, and institutions remain immutable. Only relevant
+                    <code>courses</code> are tailored.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>skills</code></td>
+                  <td><span class="badge badge-tailored">⚡ Tailored</span></td>
+                  <td>
+                    Regrouped and prioritized based on target JD, strictly derived
+                    from master resume.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>projects</code></td>
+                  <td><span class="badge badge-tailored">⚡ Tailored</span></td>
+                  <td>
+                    Selected and reordered. New unverified projects are never
+                    hallucinated.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>certificates</code></td>
+                  <td>
+                    <span class="badge badge-protected">🔒 Selection Only</span>
+                  </td>
+                  <td>
+                    Content is not rewritten; final output is capped at maximum 18
+                    items.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-          <div class="snippet-box" style="flex: 1;">
-            <div class="snippet-body" style="height: 100%; min-height: 480px;">
-              <pre id="env-code-output"></pre>
-            </div>
+        </div>
+      </section>
+
+      <!-- API Reference -->
+      <section id="api">
+        <div class="section-header">
+          <h2 class="section-title">API Endpoints</h2>
+          <p class="section-desc">
+            FastAPI OpenAPI endpoints available on running instances.
+          </p>
+        </div>
+
+        <div class="grid-3">
+          <div class="card">
+            <h3 class="endpoint-title text-cyan">POST /api/v1/tailor</h3>
+            <p class="endpoint-desc">
+              Initiates resume tailoring in synchronous or asynchronous webhook mode.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3 class="endpoint-title text-purple">GET /api/v1/tasks/{task_id}</h3>
+            <p class="endpoint-desc">
+              Polls execution status and fetches completed output of background
+              tasks.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3 class="endpoint-title text-green">GET /api/v1/themes</h3>
+            <p class="endpoint-desc">
+              Lists installed and data-mounted JSON Resume themes available for PDF
+              rendering.
+            </p>
           </div>
         </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <p>resume-ops &bull; Podman-first FastAPI JSON Resume Tailor</p>
       </div>
-    </section>
+    </footer>
 
-    <!-- Tailoring Rules -->
-    <section id="rules">
-      <div class="section-header">
-        <h2 class="section-title">Tailoring & Field Protection Rules</h2>
-        <p class="section-desc">Conservative boundaries prevent LLM hallucinations while aligning resume content to job requirements.</p>
-      </div>
-
-      <div class="card">
-        <div style="overflow-x: auto;">
-          <table class="rules-table">
-            <thead>
-              <tr>
-                <th>JSON Resume Section</th>
-                <th>Status</th>
-                <th>Tailoring Behavior</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><code>basics</code></td>
-                <td><span class="badge badge-protected">🔒 Protected</span></td>
-                <td>Name, email, phone, and links are 100% preserved. Only <code>summary</code> is tailored.</td>
-              </tr>
-              <tr>
-                <td><code>work</code></td>
-                <td><span class="badge badge-tailored">⚡ Tailored</span></td>
-                <td>Preserves all job titles, dates, and companies. Tailors <code>summary</code> and <code>highlights</code>.</td>
-              </tr>
-              <tr>
-                <td><code>education</code></td>
-                <td><span class="badge badge-tailored">⚡ Tailored</span></td>
-                <td>Degrees, dates, and institutions remain immutable. Only relevant <code>courses</code> are tailored.</td>
-              </tr>
-              <tr>
-                <td><code>skills</code></td>
-                <td><span class="badge badge-tailored">⚡ Tailored</span></td>
-                <td>Regrouped and prioritized based on target JD, strictly derived from master resume.</td>
-              </tr>
-              <tr>
-                <td><code>projects</code></td>
-                <td><span class="badge badge-tailored">⚡ Tailored</span></td>
-                <td>Selected and reordered. New unverified projects are never hallucinated.</td>
-              </tr>
-              <tr>
-                <td><code>certificates</code></td>
-                <td><span class="badge badge-protected">🔒 Selection Only</span></td>
-                <td>Content is not rewritten; final output is capped at maximum 18 items.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- API Reference -->
-    <section id="api">
-      <div class="section-header">
-        <h2 class="section-title">API Endpoints</h2>
-        <p class="section-desc">FastAPI OpenAPI endpoints available on running instances.</p>
-      </div>
-
-      <div class="grid-3">
-        <div class="card">
-          <h3 class="endpoint-title text-cyan">POST /api/v1/tailor</h3>
-          <p class="endpoint-desc">Initiates resume tailoring in synchronous or asynchronous webhook mode.</p>
-        </div>
-
-        <div class="card">
-          <h3 class="endpoint-title text-purple">GET /api/v1/tasks/{task_id}</h3>
-          <p class="endpoint-desc">Polls execution status and fetches completed output of background tasks.</p>
-        </div>
-
-        <div class="card">
-          <h3 class="endpoint-title text-green">GET /api/v1/themes</h3>
-          <p class="endpoint-desc">Lists installed and data-mounted JSON Resume themes available for PDF rendering.</p>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- Footer -->
-  <footer>
-    <div class="container">
-      <p>resume-ops &bull; Podman-first FastAPI JSON Resume Tailor</p>
-    </div>
-  </footer>
-
-  <script src="app.js"></script>
-</body>
+    <script src="app.js"></script>
+  </body>
 </html>
