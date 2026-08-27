@@ -316,5 +316,60 @@ def test_projects_validation_constraints() -> None:
     assert "List should have at most 6 items" in str(exc_info.value)
 
 
+def test_merger_with_consolidated_models(sample_resume: dict) -> None:
+    from resume_ops_api.graph.models import StrategyAndBasicsOutput, QualificationsTailoringOutput
+
+    merger = ResumeMerger()
+    merged = merger.merge(
+        original_resume=sample_resume,
+        tailored_strategy_and_basics=StrategyAndBasicsOutput(
+            target_narrative="AI Lead narrative",
+            label="Principal AI Strategist",
+            summary="Tailored executive summary paragraph.",
+        ),
+        tailored_qualifications=QualificationsTailoringOutput(
+            skills=[{"name": "Product Strategy", "keywords": ["Roadmap Planning"]}],
+            certificates=[sample_resume["certificates"][0]["name"]],
+            education=[{"courses": ["Advanced ML"]} for _ in sample_resume["education"]],
+        ),
+        tailored_work=WorkTailoringOutput(
+            work=[{"summary": "Tailored work summary", "highlights": ["Impact"]} for _ in sample_resume["work"]]
+        ),
+        tailored_projects=ProjectsTailoringOutput(
+            projects=[{"name": sample_resume["projects"][0]["name"], "description": "Tailored project", "keywords": ["Python"]}]
+        ),
+    )
+
+    assert merged["basics"]["label"] == "Principal AI Strategist"
+    assert merged["basics"]["summary"] == "Tailored executive summary paragraph."
+    assert merged["work"][0]["summary"] == "Tailored work summary"
+    assert merged["education"][0]["courses"] == ["Advanced ML"]
+    assert merged["certificates"][0]["name"] == sample_resume["certificates"][0]["name"]
+    assert len(merged["skills"]) == 1
+    assert merged["skills"][0]["name"] == "Product Strategy"
+    assert merged["projects"][0]["description"] == "Tailored project"
+
+
+def test_merger_preserves_omitted_sections(sample_resume: dict) -> None:
+    merger = ResumeMerger()
+    original_copy = copy.deepcopy(sample_resume)
+
+    # Only pass work tailoring; all other sections omitted
+    merged = merger.merge(
+        original_resume=sample_resume,
+        tailored_work=WorkTailoringOutput(
+            work=[{"summary": "Work only", "highlights": ["Work impact"]} for _ in sample_resume["work"]]
+        ),
+    )
+
+    assert merged["basics"] == original_copy["basics"]
+    assert merged["education"] == original_copy["education"]
+    assert merged["skills"] == original_copy["skills"]
+    assert merged["projects"] == original_copy["projects"]
+    assert merged["certificates"] == original_copy["certificates"]
+    assert merged["work"][0]["summary"] == "Work only"
+
+
+
 
 

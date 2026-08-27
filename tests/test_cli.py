@@ -61,7 +61,7 @@ class _FakeOrchestrator:
         self._result_resume = result_resume or {"basics": {"name": "Test"}}
         self._pdf_path = pdf_path or "/tmp/fake.pdf"
 
-    async def run(self, *, resume: dict, job_description: str, theme: str) -> TailorResult:
+    async def run(self, *, resume: dict, job_description: str, theme: str, sections: list[str] | None = None, **kwargs) -> TailorResult:
         if self.fail_with:
             raise self.fail_with
         return _make_tailor_result(self._result_resume, self._pdf_path)
@@ -533,3 +533,34 @@ class TestAsyncMainErrorHandling:
             with patch("resume_ops_api.cli.build_container", return_value=container):
                 result = await async_main(args)
                 assert result == 1
+
+    @pytest.mark.asyncio
+    async def test_successful_generation_with_sections(self, tmp_path: Path) -> None:
+        resume_path = tmp_path / "resume.json"
+        resume_path.write_text('{"basics": {"name": "Test"}}')
+        jd_path = tmp_path / "jd.md"
+        jd_path.write_text("# JD")
+        output_path = tmp_path / "output.pdf"
+        fake_pdf = tmp_path / "fake.pdf"
+        fake_pdf.write_bytes(b"%PDF-1.4\n")
+
+        args = _make_namespace(
+            resume=str(resume_path),
+            jd=str(jd_path),
+            output=str(output_path),
+        )
+        args.sections = "work,skills"
+
+        orch = _FakeOrchestrator(pdf_path=str(fake_pdf))
+        container = _FakeContainer(orchestrator=orch)
+
+        with patch("resume_ops_api.cli.get_settings") as mock_get_settings:
+            mock_settings = MagicMock()
+            mock_settings.data_dir = tmp_path / "data"
+            mock_get_settings.return_value = mock_settings
+
+            with patch("resume_ops_api.cli.build_container", return_value=container):
+                result = await async_main(args)
+                assert result == 0
+                assert output_path.is_file()
+

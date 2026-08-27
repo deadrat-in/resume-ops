@@ -10,7 +10,9 @@ from resume_ops_api.graph.models import (
     EducationTailoringOutput,
     OptionalSectionsOutput,
     ProjectsTailoringOutput,
+    QualificationsTailoringOutput,
     SkillsTailoringOutput,
+    StrategyAndBasicsOutput,
     WorkTailoringOutput,
     BasicsTailoringOutput,
 )
@@ -46,6 +48,8 @@ class ResumeMerger:
         self,
         *,
         original_resume: dict[str, Any],
+        tailored_strategy_and_basics: StrategyAndBasicsOutput | None = None,
+        tailored_qualifications: QualificationsTailoringOutput | None = None,
         tailored_basics: BasicsTailoringOutput | None = None,
         tailored_work: WorkTailoringOutput | None = None,
         tailored_education: EducationTailoringOutput | None = None,
@@ -56,12 +60,34 @@ class ResumeMerger:
     ) -> dict[str, Any]:
         merged = copy.deepcopy(original_resume)
         merged["basics"] = copy.deepcopy(original_resume.get("basics", {}))
-        self._merge_basics(merged, original_resume, tailored_basics)
+
+        effective_basics = tailored_basics
+        if effective_basics is None and tailored_strategy_and_basics is not None:
+            if tailored_strategy_and_basics.label is not None or tailored_strategy_and_basics.summary is not None:
+                effective_basics = BasicsTailoringOutput(
+                    label=tailored_strategy_and_basics.label,
+                    summary=tailored_strategy_and_basics.summary,
+                )
+        self._merge_basics(merged, original_resume, effective_basics)
         self._merge_work(merged, original_resume, tailored_work)
-        self._merge_education(merged, original_resume, tailored_education)
-        self._merge_skills(merged, original_resume, tailored_skills)
+
+        effective_education = tailored_education
+        if effective_education is None and tailored_qualifications is not None and tailored_qualifications.education:
+            effective_education = EducationTailoringOutput(education=tailored_qualifications.education)
+        self._merge_education(merged, original_resume, effective_education)
+
+        effective_skills = tailored_skills
+        if effective_skills is None and tailored_qualifications is not None and tailored_qualifications.skills:
+            effective_skills = SkillsTailoringOutput(skills=tailored_qualifications.skills)
+        self._merge_skills(merged, original_resume, effective_skills)
+
         self._merge_projects(merged, original_resume, tailored_projects)
-        self._merge_certificates(merged, original_resume, selected_certificates)
+
+        effective_certificates = selected_certificates
+        if effective_certificates is None and tailored_qualifications is not None and tailored_qualifications.certificates:
+            effective_certificates = CertificatesSelectionOutput(certificates=tailored_qualifications.certificates)
+        self._merge_certificates(merged, original_resume, effective_certificates)
+
         self._merge_optional_sections(merged, original_resume, tailored_optional_sections)
         return merged
 

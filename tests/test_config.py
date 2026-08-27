@@ -351,3 +351,37 @@ class TestSettingsModelResolution:
         with pytest.raises(ValidationError, match="Missing required model configurations"):
             Settings(_env_file=None)
 
+
+class TestSettingsTailorSections:
+    """Verify TAILOR_SECTIONS configuration parsing and defaults."""
+
+    def test_default_tailor_sections(self) -> None:
+        settings = Settings(_env_file=None, default_model="openai/gpt-4o-mini")
+        assert settings.tailor_sections == ["basics", "work", "skills", "projects", "education", "certificates"]
+
+    def test_tailor_sections_from_comma_separated_string(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setenv("TAILOR_SECTIONS", "work, skills, projects")
+        settings = Settings(default_model="openai/gpt-4o-mini")
+        assert settings.tailor_sections == ["work", "skills", "projects"]
+
+    def test_tailor_sections_from_list(self) -> None:
+        settings = Settings(
+            _env_file=None,
+            default_model="openai/gpt-4o-mini",
+            tailor_sections=["work", "basics"],
+        )
+        assert settings.tailor_sections == ["work", "basics"]
+
+    def test_consolidated_models_resolve(self) -> None:
+        settings = Settings(
+            _env_file=None,
+            default_model="openai/gpt-4o-mini",
+            strategy_and_basics_model="anthropic/claude-3-5-sonnet",
+            qualifications_model="google/gemini-2.0-flash",
+        )
+        assert settings.strategy_and_basics_model == "anthropic/claude-3-5-sonnet"
+        assert settings.qualifications_model == "google/gemini-2.0-flash"
+        assert settings.work_model == "openai/gpt-4o-mini"
+        assert settings.projects_model == "openai/gpt-4o-mini"
+
+

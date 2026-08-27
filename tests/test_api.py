@@ -190,3 +190,22 @@ async def test_missing_optional_sections_still_complete(client: AsyncClient, sam
     # When projects are absent, the pipeline sets projects=[] in the output
     assert payload["resume"].get("projects") == []
     assert payload["resume"].get("certificates") == []
+
+
+async def test_sync_tailor_with_custom_sections(client: AsyncClient, sample_resume: dict) -> None:
+    response = await client.post(
+        "/api/v1/tailor",
+        json={
+            "resume": sample_resume,
+            "job_description": "Need an AI product leader.",
+            "sections": ["work"],
+        },
+    )
+    assert response.status_code == 200
+    payload = response.json()
+    # Work was tailored
+    assert "Tailored" in payload["resume"]["work"][0]["summary"]
+    # Basics was omitted from sections so original is preserved
+    assert payload["resume"]["basics"]["label"] == sample_resume["basics"]["label"]
+    assert payload["resume"]["basics"]["summary"] == sample_resume["basics"]["summary"]
+

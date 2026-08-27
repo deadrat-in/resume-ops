@@ -5,7 +5,7 @@ from typing import Any
 
 
 def _json(data: Any) -> str:
-    return json.dumps(data, ensure_ascii=True, indent=2)
+    return json.dumps(data, ensure_ascii=True, separators=(",", ":"))
 
 
 def _apply_style(system: str, style: str | None) -> str:
@@ -20,6 +20,40 @@ def _apply_style(system: str, style: str | None) -> str:
             f"4. If the style requests length properties (e.g. 'concise', 'verbose'), follow them strictly while adhering to the section constraints."
         )
     return system
+
+
+def strategy_and_basics_prompt(
+    resume: dict[str, Any],
+    job_description: str,
+    style: str | None = None,
+    tailor_basics: bool = True,
+) -> tuple[str, str]:
+    basics_rules = ""
+    if tailor_basics:
+        basics_rules = (
+            "\n\nBASICS SECTION (HEADLINE & SUMMARY) RULES:\n"
+            "- Tailor only the professional label (headline/title) and the main summary paragraph of the basics section.\n"
+            "- Write a single, concise professional summary paragraph aiming for under 100 words (3-4 sentences).\n"
+            "- CRITICAL: The tailored summary MUST explicitly retain or include the mention of "
+            "candidate education if it is high signalling (e.g. MBA from IIM Trichy).\n"
+            "- Do not invent unsupported responsibilities or achievements.\n"
+            "- Return label and summary fields matching the target narrative."
+        )
+    else:
+        basics_rules = (
+            "\n\nBASICS SECTION:\n"
+            "- Basics tailoring is disabled. Return label=null and summary=null."
+        )
+
+    system = (
+        "You are tailoring a resume without inventing facts. "
+        "Formulate a coherent tailoring strategy for the candidate matching the target job description.\n"
+        "Return structured JSON with keys: target_narrative, priority_keywords, section_rules, red_lines, label, and summary."
+        f"{basics_rules}"
+    )
+    system = _apply_style(system, style)
+    user = f"Job description:\n{job_description}\n\nMaster resume:\n{_json(resume)}"
+    return system, user
 
 
 def strategy_prompt(resume: dict[str, Any], job_description: str) -> tuple[str, str]:
@@ -97,8 +131,67 @@ def work_prompt(
     user = (
         f"Job description:\n{job_description}\n\n"
         f"Strategy:\n{_json(strategy)}\n\n"
-        f"Master resume for context:\n{_json(resume)}\n\n"
         f"Target work section:\n{_json(resume.get('work', []))}"
+    )
+    return system, user
+
+
+def qualifications_prompt(
+    resume: dict[str, Any],
+    job_description: str,
+    strategy: dict[str, Any],
+    active_sections: list[str] | None = None,
+) -> tuple[str, str]:
+    active = set(active_sections or ["skills", "certificates", "education"])
+    sections_rules = []
+    
+    if "skills" in active:
+        sections_rules.append(
+            "- SKILLS: Tailor the skills section by regrouping and prioritizing existing evidence from the candidate's skills. "
+            "Keep JSON Resume skill objects. Do not invent unsupported skills. "
+            "Structure the output into a maximum of 6 (ideally 4 to 6) distinct, high-impact categories/names. "
+            "Under each category, include between 3 and 8 keywords (or fewer if not enough evidence exists) "
+            "representing the most relevant technologies, tools, or methodologies."
+        )
+    else:
+        sections_rules.append("- SKILLS: Skills tailoring is disabled. Return skills as an empty list [].")
+
+    if "certificates" in active:
+        sections_rules.append(
+            "- CERTIFICATES: Select only certificates from the candidate's certificates list that have a strong, direct mapping "
+            "to the target role's priority keywords. Return a maximum of 18 (or fewer if not meeting strict relevance). "
+            "Do not rewrite or invent certificate names; use existing certificate names verbatim."
+        )
+    else:
+        sections_rules.append("- CERTIFICATES: Certificate selection is disabled. Return certificates as an empty list [].")
+
+    if "education" in active:
+        sections_rules.append(
+            "- EDUCATION: Tailor only education courses. Preserve institution, degree, dates, scores, and other metadata exactly. "
+            "If the input education entries do not contain a courses field or it is empty, synthesize/suggest a list of 3-5 "
+            "highly relevant, high-signaling academic courses based on the area of study and target job description/strategy. "
+            "The output education list MUST align 1:1 in length and order with input education entries."
+        )
+    else:
+        sections_rules.append("- EDUCATION: Education tailoring is disabled. Return education as an empty list [].")
+
+    system = (
+        "Tailor candidate qualifications (skills, certificates, education) without inventing facts.\n\n"
+        "SECTION RULES:\n" + "\n".join(sections_rules) + "\n\n"
+        "Return structured JSON with keys: skills (list of objects with name and keywords), "
+        "certificates (list of strings), and education (list of objects with courses list)."
+    )
+
+    target_qualifications = {
+        "skills": resume.get("skills", []) if "skills" in active else [],
+        "certificates": resume.get("certificates", []) if "certificates" in active else [],
+        "education": resume.get("education", []) if "education" in active else [],
+    }
+
+    user = (
+        f"Job description:\n{job_description}\n\n"
+        f"Strategy:\n{_json(strategy)}\n\n"
+        f"Target qualifications:\n{_json(target_qualifications)}"
     )
     return system, user
 
@@ -159,7 +252,6 @@ def projects_prompt(
     user = (
         f"Job description:\n{job_description}\n\n"
         f"Strategy:\n{_json(strategy)}\n\n"
-        f"Master resume:\n{_json(resume)}\n\n"
         f"Projects section:\n{_json(resume.get('projects', []))}"
     )
     return system, user

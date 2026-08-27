@@ -12,6 +12,18 @@ class StrategyOutput(BaseModel):
     red_lines: list[str] = Field(default_factory=list)
 
 
+class StrategyAndBasicsOutput(BaseModel):
+    target_narrative: str
+    priority_keywords: list[str] = Field(default_factory=list)
+    section_rules: list[str] = Field(default_factory=list)
+    red_lines: list[str] = Field(default_factory=list)
+    label: str | None = Field(default=None, description="Tailored professional title / headline matching the strategy.")
+    summary: str | None = Field(
+        default=None,
+        description="Tailored professional summary paragraph matching the strategy. Keep it concise, writing a single punchy paragraph aiming for under 100 words."
+    )
+
+
 class WorkEntryTailoring(BaseModel):
     summary: str | None = None
     highlights: list[str] = Field(default_factory=list)
@@ -70,6 +82,49 @@ class SkillsTailoringOutput(BaseModel):
         max_length=6,
         description="List of 4 to 6 skill categories tailored to the job description."
     )
+
+
+class QualificationsTailoringOutput(BaseModel):
+    skills: list[SkillEntry] = Field(
+        default_factory=list,
+        min_length=0,
+        max_length=6,
+        description="List of 4 to 6 skill categories tailored to the job description."
+    )
+    certificates: list[str] = Field(
+        default_factory=list,
+        description="List of relevant certificate names selected verbatim from the master resume."
+    )
+    education: list[EducationEntryTailoring] = Field(
+        default_factory=list,
+        description="Tailored education courses aligned 1:1 with education entries in the master resume."
+    )
+
+    @model_validator(mode="after")
+    def validate_qualifications(self, info: ValidationInfo) -> "QualificationsTailoringOutput":
+        context = info.context
+        if context and "original_resume" in context:
+            if self.education:
+                expected_edu_count = len(context["original_resume"].get("education", []))
+                if len(self.education) != expected_edu_count:
+                    raise ValueError(
+                        f"The number of education items returned ({len(self.education)}) must align 1:1 "
+                        f"with the master resume ({expected_edu_count})."
+                    )
+            if self.certificates:
+                original_certs = {
+                    c.get("name", "").strip().lower()
+                    for c in context["original_resume"].get("certificates", [])
+                    if isinstance(c, dict) and c.get("name")
+                }
+                if original_certs:
+                    for cert in self.certificates:
+                        if cert.strip().lower() not in original_certs:
+                            raise ValueError(
+                                f"Certificate '{cert}' does not exist in the master resume. "
+                                f"Allowed certificates: {', '.join(sorted(original_certs))}"
+                            )
+        return self
 
 
 class ProjectEntryTailoring(BaseModel):

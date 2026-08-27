@@ -23,8 +23,10 @@ class Settings(BaseSettings):
     master_resume_path: Path | None = None
     
     default_model: str | None = None
+    strategy_and_basics_model: str | None = None
     strategy_model: str | None = None
     work_model: str | None = None
+    qualifications_model: str | None = None
     education_model: str | None = None
     skills_model: str | None = None
     projects_model: str | None = None
@@ -32,13 +34,41 @@ class Settings(BaseSettings):
     optional_sections_model: str | None = None
     basics_model: str | None = None
 
+    tailor_sections: list[str] | str = Field(
+        default_factory=lambda: [
+            "basics",
+            "work",
+            "skills",
+            "projects",
+            "education",
+            "certificates",
+        ]
+    )
+
     tailoring_style: str | None = None
 
     @model_validator(mode="after")
     def resolve_and_validate_models(self) -> Settings:
+        # Fallback consolidated models from legacy fields if not explicitly provided
+        if not self.strategy_and_basics_model or not self.strategy_and_basics_model.strip():
+            self.strategy_and_basics_model = (
+                self.strategy_model
+                or self.basics_model
+                or self.default_model
+            )
+        if not self.qualifications_model or not self.qualifications_model.strip():
+            self.qualifications_model = (
+                self.skills_model
+                or self.certificates_model
+                or self.education_model
+                or self.default_model
+            )
+
         model_fields = [
+            "strategy_and_basics_model",
             "strategy_model",
             "work_model",
+            "qualifications_model",
             "education_model",
             "skills_model",
             "projects_model",
@@ -56,8 +86,14 @@ class Settings(BaseSettings):
             else:
                 setattr(self, field, val.strip())
 
-        # Validate that all resolved models are set
-        missing = [f.upper() for f in model_fields if getattr(self, f) is None]
+        # Validate that required consolidated models are set
+        required_fields = [
+            "strategy_and_basics_model",
+            "work_model",
+            "qualifications_model",
+            "projects_model",
+        ]
+        missing = [f.upper() for f in required_fields if getattr(self, f) is None]
         if missing:
             raise ValueError(
                 f"Missing required model configurations. You must configure DEFAULT_MODEL "
@@ -93,6 +129,17 @@ class Settings(BaseSettings):
     opik_project_name: str = "resume-ops"
     opik_workspace: str | None = None
     eval_model: str | None = None
+
+    @field_validator("tailor_sections", mode="before")
+    @classmethod
+    def parse_tailor_sections(cls, value: object) -> list[str]:
+        if value is None:
+            return ["basics", "work", "skills", "projects", "education", "certificates"]
+        if isinstance(value, str):
+            return [item.strip().lower() for item in value.split(",") if item.strip()]
+        if isinstance(value, list):
+            return [str(item).strip().lower() for item in value if str(item).strip()]
+        raise ValueError("TAILOR_SECTIONS must be a comma-separated string or list.")
 
     @field_validator("allowed_themes", mode="before")
     @classmethod

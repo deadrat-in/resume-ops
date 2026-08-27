@@ -63,12 +63,17 @@ async def async_main(args: argparse.Namespace) -> int:
             logging.error(f"Theme error: {e}")
             return 1
 
+    sections = None
+    if getattr(args, "sections", None):
+        sections = [s.strip().lower() for s in args.sections.split(",") if s.strip()]
+
     logging.info(f"Starting tailoring process with theme '{theme}'...")
     try:
         result = await container.orchestrator.run(
             resume=resume_data,
             job_description=job_description,
             theme=theme,
+            sections=sections,
         )
     except ResumeValidationError as e:
         logging.error(f"Tailoring failed: {e.message}")
@@ -124,6 +129,10 @@ def main() -> None:
     parser.add_argument(
         "--theme",
         help="Theme to use for the PDF generation",
+    )
+    parser.add_argument(
+        "--sections",
+        help="Comma-separated list of sections to tailor (e.g. 'basics,work,skills,projects'). If omitted, uses configured defaults.",
     )
 
     args = parser.parse_args()

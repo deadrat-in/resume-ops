@@ -86,15 +86,12 @@ def build_container(settings: Settings, **overrides: Any) -> ServiceContainer:
         merger=merger,
         renderer=renderer,
         validator=validator,
-        strategy_model=settings.strategy_model,
+        strategy_and_basics_model=settings.strategy_and_basics_model,
         work_model=settings.work_model,
-        education_model=settings.education_model,
-        skills_model=settings.skills_model,
+        qualifications_model=settings.qualifications_model,
         projects_model=settings.projects_model,
-        certificates_model=settings.certificates_model,
-        optional_sections_model=settings.optional_sections_model,
-        basics_model=settings.basics_model,
         style=settings.tailoring_style,
+        default_sections=settings.tailor_sections,
     )
     orchestrator = overrides.get("orchestrator") or TailorOrchestrator(
         graph=graph,

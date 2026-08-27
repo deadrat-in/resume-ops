@@ -780,3 +780,53 @@ class TestAtsText:
         assert "Scaled systems to 10M DAU" in ats_text
 
 
+class TestResumeGraphPipeline:
+    """Tests for the 4-node ResumeGraph execution and section skipping."""
+
+    @pytest.mark.asyncio
+    async def test_graph_executes_with_selective_sections(self, tmp_path: Path) -> None:
+        from tests.conftest import FakeStructuredLLMClient, FakeRenderer
+        from resume_ops_api.graph.pipeline import ResumeGraph
+        from resume_ops_api.graph.merge import ResumeMerger
+        from resume_ops_api.graph.state import ResumeGraphState
+
+        schema_path = Path(__file__).resolve().parent.parent / "src" / "resume_ops_api" / "resources" / "resume_schema.json"
+        validator = ResumeSchemaValidator(schema_path)
+        sample_resume = {
+            "basics": {"name": "Test Candidate", "label": "Original Title", "summary": "Original summary."},
+            "work": [{"name": "Acme", "position": "Dev", "startDate": "2020-01-01", "summary": "Original work"}],
+            "skills": [{"name": "Original Skill", "keywords": ["Legacy"]}],
+            "projects": [{"name": "Original Project", "description": "Original proj"}],
+        }
+
+        client = FakeStructuredLLMClient(sample_resume)
+        graph = ResumeGraph(
+            llm_client=client,
+            merger=ResumeMerger(),
+            renderer=FakeRenderer(),
+            validator=validator,
+        )
+
+        # Run with only "work" section enabled
+        state: ResumeGraphState = {
+            "original_resume": sample_resume,
+            "job_description": "Looking for a Dev",
+            "theme": "jsonresume-theme-stackoverflow",
+            "job_id": "test-job-123",
+            "output_dir": tmp_path,
+            "sections": ["work"],
+        }
+
+        final_state = await graph.run(state)
+        final_resume = final_state["final_resume"]
+
+        # Work was tailored
+        assert "Tailored" in final_resume["work"][0]["summary"]
+        # Basics, skills, and projects preserved from original
+        assert final_resume["basics"]["label"] == "Original Title"
+        assert final_resume["basics"]["summary"] == "Original summary."
+        assert final_resume["skills"][0]["name"] == "Original Skill"
+        assert final_resume["projects"][0]["description"] == "Original proj"
+
+
+

@@ -28,6 +28,36 @@ class FakeStructuredLLMClient:
                 section_rules=["Preserve protected fields."],
                 red_lines=["Do not invent facts."],
             )
+        if response_model.__name__ == "StrategyAndBasicsOutput":
+            return response_model(
+                target_narrative="Match product and platform leadership roles.",
+                priority_keywords=["Product Strategy", "AI", "Platform"],
+                section_rules=["Preserve protected fields."],
+                red_lines=["Do not invent facts."],
+                label="Tailored professional label / headline",
+                summary="Tailored professional summary matching the strategy.",
+            )
+        if response_model.__name__ == "QualificationsTailoringOutput":
+            skills = [
+                {
+                    "name": "Product Strategy",
+                    "keywords": ["Roadmap Planning", "Go-to-Market (GTM)"],
+                },
+                {
+                    "name": "Invented Space Tech",
+                    "keywords": ["Warp Drive"],
+                },
+            ]
+            certificates = [item["name"] for item in self.resume.get("certificates", [])[:2]]
+            education = [
+                {"courses": [f"{item.get('studyType', 'Degree')} coursework aligned to target role"]}
+                for item in self.resume.get("education", [])
+            ]
+            return response_model(
+                skills=skills,
+                certificates=certificates,
+                education=education,
+            )
         if response_model.__name__ == "BasicsTailoringOutput":
             return response_model(
                 label="Tailored professional label / headline",

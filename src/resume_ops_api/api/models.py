@@ -11,6 +11,7 @@ class TailorRequest(BaseModel):
     job_description: str = Field(min_length=1)
     theme: str | None = None
     callback_url: AnyHttpUrl | None = None
+    sections: list[str] | None = None
 
 
 class TailorResponse(BaseModel):
