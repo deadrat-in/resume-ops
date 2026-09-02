@@ -1,8 +1,12 @@
 # Resume Ops API
 
+> 📢 **resume-ops is now part of the unified [JobFoundry](https://github.com/Rat-S/JobFoundry) platform!**  
+> `resume-ops` powers the automated resume tailoring and PDF generation engine inside JobFoundry. For the full end-to-end stack (browser extension, ATS board scrapers, fit scoring, Kanban dashboard, and 1-command installer), visit **[JobFoundry](https://github.com/Rat-S/JobFoundry)**.
+
 Podman-first FastAPI service for tailoring a JSON Resume to a job description while protecting immutable resume fields.
 
 [![Documentation](https://img.shields.io/badge/Docs-.env%20Configurator%20%26%20Guide-38bdf8?style=for-the-badge&logo=github)](https://deadrat-in.github.io/resume-ops/)
+
 
 ## Why resume-ops? (The Ethos)
 
