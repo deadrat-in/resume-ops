@@ -1,5 +1,7 @@
 # Resume-Ops Evaluation & Observability Guide
 
+> ⚠️ **Notice**: `resume-ops` has been incorporated into **[JobFoundry](https://github.com/deadrat-in/JobFoundry)** ([jobfoundry.covai.org](https://jobfoundry.covai.org/)). Standalone `resume-ops` may not receive further updates; please refer to JobFoundry for the latest complete pipeline.
+
 `resume-ops` provides a multi-layered evaluation and observability framework designed to ensure high tailoring quality, strict anti-hallucination compliance, and real-time execution tracing.
 
 ---
